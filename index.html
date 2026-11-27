@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velayutham R | Professional Graphic Designer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #020c1b 0%, #0a192f 50%, #112240 100%);
+            --card-bg: #112240;
+            --accent-cyan: #00f2fe;
+            --accent-blue: #0072ff;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+- { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+            position: relative;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 2; }
+        section { padding: 7rem 0; position: relative; z-index: 2; }
+        
+        /* MOUSE POINTER GLOW EFFECT */
+        .mouse-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(0, 242, 254, 0.07) 0%, rgba(0, 114, 255, 0.03) 45%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            transform: translate(-50%, -50%);
+            /* Using standard variables updated by JS for seamless performance */
+            left: var(--mouse-x, -500px);
+            top: var(--mouse-y, -500px);
+            transition: transform 0.1s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* MOVING GRAPHIC DESIGN BACKGROUND ELEMENTS */
+        .bg-canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+            opacity: 0.6;
+        }
+        .design-element {
+            position: absolute;
+            border: 1px dashed rgba(0, 242, 254, 0.15);
+            animation: drift 25s infinite linear;
+        }
+        .de-grid {
+            width: 300px;
+            height: 300px;
+            top: 15%;
+            left: -5%;
+            background-image: linear-gradient(rgba(0, 242, 254, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 242, 254, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            border-radius: 8px;
+        }
+        .de-circle {
+            width: 400px;
+            height: 400px;
+            bottom: 10%;
+            right: -10%;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 114, 255, 0.1);
+        }
+        .de-circle::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 0; width: 100%; height: 1px;
+            background: rgba(0, 242, 254, 0.1);
+        }
+        .de-vector {
+            width: 250px;
+            height: 150px;
+            top: 50%;
+            left: 75%;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            animation-duration: 35s;
+        }
+        .de-crosshair {
+            width: 40px;
+            height: 40px;
+            border: none;
+            top: 25%;
+            right: 20%;
+            animation-duration: 15s;
+        }
+        .de-crosshair::before, .de-crosshair::after {
+            content: ''; position: absolute; background: rgba(0, 242, 254, 0.3);
+        }
+        .de-crosshair::before { top: 50%; left: 0; width: 100%; height: 1px; }
+        .de-crosshair::after { left: 50%; top: 0; width: 1px; height: 100%; }
+
+        @keyframes drift {
+            0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            50% { transform: translate(30px, -40px) rotate(180deg) scale(1.05); }
+            100% { transform: translate(0, 0) rotate(360deg) scale(1); }
+        }
+
+        /* SCROLL REVEAL MECHANICS */
+        .reveal { opacity: 0; transform: translateY(40px); transition: var(--transition-smooth); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        /* HERO PORTRAIT ENTRANCE ANIMATION */
+        @keyframes heroImageEntrance {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes lineExpand {
+            0% { width: 0%; opacity: 0; }
+            100% { width: 100%; opacity: 1; }
+        }
+        
+        header {
+            position: fixed; top: 0; width: 100%;
+            background: rgba(2, 12, 27, 0.85); backdrop-filter: blur(12px);
+            z-index: 1000; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .navbar { display: flex; justify-content: space-between; align-items: center; height: 80px; }
+        .logo {
+            font-weight: 800; font-size: 1.4rem; letter-spacing: -0.5px;
+            background: linear-gradient(to right, #ffffff, var(--accent-cyan));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+        .nav-links a { text-decoration: none; color: var(--text-secondary); font-weight: 500; font-size: 0.95rem; transition: var(--transition-smooth); }
+        .nav-links a:hover { color: var(--accent-cyan); }
+        
+        /* HERO SECTION */
+        .hero { min-height: 100vh; display: grid; grid-template-columns: 1.1fr 1.1fr; align-items: center; gap: 3rem; padding-top: 100px; }
+        .hero-content { max-width: 700px; }
+        .hero-tagline { color: var(--accent-cyan); font-weight: 600; letter-spacing: 2px; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 1rem; }
+        
+        /* WAVING TEXT EFFECT FOR NAME */
+        .hero-name { font-size: 4.2rem; font-weight: 800; line-height: 1.1; margin-bottom: 1rem; letter-spacing: -1px; display: block;}
+        .wave-letter {
+            display: inline-block;
+            cursor: default;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.3s ease;
+        }
+        .hero-name:hover .wave-letter {
+            animation: textWave 1.2s ease-in-out infinite;
+        }
+        .wave-letter:nth-child(1) { animation-delay: 0.0s; }
+        .wave-letter:nth-child(2) { animation-delay: 0.1s; }
+        .wave-letter:nth-child(3) { animation-delay: 0.2s; }
+        .wave-letter:nth-child(4) { animation-delay: 0.3s; }
+        .wave-letter:nth-child(5) { animation-delay: 0.4s; }
+        .wave-letter:nth-child(6) { animation-delay: 0.5s; }
+        .wave-letter:nth-child(7) { animation-delay: 0.6s; }
+        .wave-letter:nth-child(8) { animation-delay: 0.7s; }
+        .wave-letter:nth-child(9) { animation-delay: 0.8s; }
+        .wave-letter:nth-child(10) { animation-delay: 0.9s; }
+        .wave-letter:nth-child(11) { animation-delay: 1.0s; }
+        .wave-letter:nth-child(12) { animation-delay: 1.1s; }
+
+        @keyframes textWave {
+            0%, 100% { transform: translateY(0); color: inherit; }
+            30% { transform: translateY(-15px); color: var(--accent-cyan); text-shadow: 0 10px 20px rgba(0, 242, 254, 0.4); }
+            60% { transform: translateY(0); color: inherit; }
+        }
+
+        .hero-title { font-size: 2rem; font-weight: 700; background: linear-gradient(to right, #ffffff, var(--text-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1.5rem; }
+        .hero-desc { font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 2.5rem; }
+        
+        /* FIXED ANCHORED PORTRAIT DESIGN */
+        .hero-img-container { 
+            position: relative; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            width: 100%;
+            max-width: 440px;
+            margin: 0 auto;
+            animation: heroImageEntrance 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .hero-portrait-large {
+            width: 100%;
+            height: auto;
+            border-radius: 24px 24px 0 0;
+            object-fit: cover;
+            display: block;
+            transition: var(--transition-smooth);
+        }
+        .hero-base-line {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--accent-cyan), var(--accent-blue), transparent);
+            box-shadow: 0 0 12px var(--accent-cyan);
+            animation: lineExpand 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .hero-base-shadow {
+            width: 85%;
+            height: 15px;
+            background: radial-gradient(ellipse at center, rgba(0, 242, 254, 0.2) 0%, transparent 70%);
+            margin-top: 2px;
+        }
+        .hero-img-container:hover .hero-portrait-large {
+            transform: translateY(-4px);
+        }
+        
+        .cta-btn { display: inline-flex; align-items: center; gap: 0.6rem; background: linear-gradient(135deg, var(--accent-blue) 0%, #0052cc 100%); color: white; padding: 0.9rem 2rem; border-radius: 50px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 20px rgba(0, 114, 255, 0.3); transition: var(--transition-smooth); position: relative; z-index: 3; border: none; cursor: pointer; font-family: inherit; font-size: 0.95rem; }
+        .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 25px rgba(0, 114, 255, 0.5); }
+        .section-header { margin-bottom: 4rem; }
+        .section-num { color: var(--accent-cyan); font-family: monospace; font-size: 1rem; margin-bottom: 0.5rem; display: block; }
+        .section-title { font-size: 2.2rem; font-weight: 700; }
+        
+        .about-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 4rem; }
+        .about-bio p { font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 1.5rem; }
+        .skills-container h3 { font-size: 1.3rem; margin: 2rem 0 1.2rem 0; }
+        .skills-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        .skill-item { display: flex; align-items: center; gap: 0.6rem; color: var(--text-secondary); font-size: 0.95rem; }
+        .skill-item i { color: var(--accent-cyan); }
+        
+        .timeline { border-left: 2px solid rgba(255, 255, 255, 0.1); padding-left: 1.5rem; }
+        .timeline-item { position: relative; margin-bottom: 2.5rem; }
+        .timeline-item::before { content: ''; position: absolute; left: calc(-1.5rem - 6px); top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent-cyan); box-shadow: 0 0 8px var(--accent-cyan); }
+        .time-period { font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; }
+        .job-title { font-size: 1.2rem; font-weight: 700; color: white; }
+        .company { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 0.4rem; }
+        .job-desc { font-size: 0.9rem; color: var(--text-muted); }
+        
+        /* MASONRY STYLE PORTFOLIO */
+        .gallery-grid { columns: 3 320px; column-gap: 2rem; width: 100%; }
+        .gallery-card { 
+            break-inside: avoid; margin-bottom: 2rem; position: relative; 
+            border-radius: 14px; overflow: hidden; background: var(--card-bg); 
+            border: 1px solid rgba(255, 255, 255, 0.04); box-shadow: 0 12px 35px rgba(0,0,0,0.3); 
+            transition: var(--transition-smooth); display: inline-block; width: 100%; z-index: 3;
+        }
+        .gallery-card img { width: 100%; height: auto; display: block; object-fit: contain; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        .gallery-overlay { 
+            position: absolute; inset: 0; 
+            background: linear-gradient(to top, rgba(2, 12, 27, 0.96) 0%, rgba(2, 12, 27, 0.2) 100%); 
+            display: flex; flex-direction: column; justify-content: flex-end; padding: 1.8rem; 
+            opacity: 0; transform: translateY(15px); transition: var(--transition-smooth); 
+        }
+        .gallery-card:hover { transform: translateY(-8px); border-color: rgba(0, 242, 254, 0.4); box-shadow: 0 20px 40px rgba(0, 242, 254, 0.15); }
+        .gallery-card:hover img { transform: scale(1.03); }
+        .gallery-card:hover .gallery-overlay { opacity: 1; transform: translateY(0); }
+        .project-category { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-cyan); font-weight: 700; margin-bottom: 0.3rem; }
+        .project-title { font-size: 1.25rem; font-weight: 700; color: white; line-height: 1.3; }
+
+        /* MAGAZINE FOLDER SLIDER SECTION */
+        .magazine-viewer-box {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+        }
+        .magazine-stage {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            background: #020c1b;
+            min-height: 480px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .magazine-slide-img {
+            max-width: 100%;
+            max-height: 700px;
+            width: auto;
+            height: auto;
+            border-radius: 6px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: block;
+        }
+        .magazine-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 1.25rem;
+            flex-wrap: wrap;
+        }
+        .magazine-btn-group {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .mag-ctrl-btn {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 0.55rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .mag-ctrl-btn:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+        .magazine-status {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-family: monospace;
+        }
+        
+        .contact-box { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 4.5rem 2rem; text-align: center; max-width: 750px; margin: 0 auto; position: relative; z-index: 3; }
+        .contact-box h3 { font-size: 2.2rem; margin-bottom: 1rem; }
+        .contact-box p { color: var(--text-secondary); margin-bottom: 2.5rem; font-size: 1.05rem; }
+        footer { text-align: center; padding: 3.5rem 0; color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid rgba(255, 255, 255, 0.05); position: relative; z-index: 3; }
+        
+        @media (max-width: 968px) {
+            .hero { grid-template-columns: 1fr; text-align: center; padding-top: 120px; gap: 3rem;}
+            .hero-content { max-width: 100%; order: 2; }
+            .hero-img-container { order: 1; max-width: 300px; }
+            .hero-name { font-size: 3rem; }
+            .about-grid { grid-template-columns: 1fr; gap: 3.5rem; }
+            .gallery-grid { columns: 1; }
+            .magazine-stage { min-height: 340px; }
+            .magazine-slide-img { max-height: 460px; }
+            .mouse-glow { display: none; } /* Hide glow tracker on touch-first screens */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MOUSE POINTER GLOW CORE ELEMENT -->
+    <div class="mouse-glow" id="cursor-glow"></div>
+
+    <!-- BACKGROUND CANVAS -->
+    <div class="bg-canvas-container">
+        <div class="design-element de-grid"></div>
+        <div class="design-element de-circle"></div>
+        <div class="design-element de-vector"></div>
+        <div class="design-element de-crosshair"></div>
+    </div>
+
+    <header>
+        <div class="container navbar">
+            <div class="logo">VELAYUTHAM R.</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#portfolio">Portfolio Work</a></li>
+                <li><a href="#magazine">Magazine</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section id="home" class="container hero">
+        <div class="hero-content">
+            <p class="hero-tagline">3+ Years of Verified Design Strategy</p>
+            <h1 class="hero-name" id="waving-name">Velayutham R</h1>
+            <h2 class="hero-title">Creative Graphic Designer</h2>
+            <p class="hero-desc">Expert at transforming complex corporate parameters, institutional frameworks, and high-volume media campaigns into highly polished visual communication assets.</p>
+            <a href="#portfolio" class="cta-btn">Explore Design Gallery <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+        <div class="hero-img-container">
+            <img src="Velayutham.jpg" alt="Velayutham R Profile" class="hero-portrait-large">
+            <div class="hero-base-line"></div>
+            <div class="hero-base-shadow"></div>
+        </div>
+    </section>
+
+    <section id="about" class="container">
+        <div class="section-header reveal">
+            <span class="section-num">01. Profile & Experience</span>
+            <h2 class="section-title">Design Capabilities</h2>
+        </div>
+        <div class="about-grid">
+            <div class="about-bio reveal">
+                <p>Versatile Visual Specialist with a deep-rooted history managing end-to-end layouts and public-facing high-engagement corporate collateral. Specialized in translating structural operational data, corporate reports, and multi-market advertisements into professional, conversion-driven brand architecture.</p>
+                <p>My workflow balances structural precision with rapid asset turnaround, integrating advanced vector generation, layout typography, and ethical AI orchestration workflows to consistently meet tight commercial and institutional deadlines.</p>
+                <div class="skills-container">
+                    <h3>Core Technical Competencies</h3>
+                    <div class="skills-list" id="skills-box"></div>
+                </div>
+            </div>
+            <div class="reveal">
+                <h3 style="margin-bottom: 1.5rem; font-size: 1.3rem;">Professional Timeline</h3>
+                <div class="timeline" id="timeline-box"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" style="background: rgba(2, 12, 27, 0.45);">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-num">02. Curated Production Portfolio</span>
+                <h2 class="section-title">Selected Creative Assets</h2>
+            </div>
+            <div class="gallery-grid" id="gallery-box"></div>
+        </div>
+    </section>
+
+    <section id="magazine" class="container reveal">
+        <div class="section-header">
+            <span class="section-num">03. Editorial & Print</span>
+            <h2 class="section-title">Magazine Ad</h2>
+        </div>
+        <div class="magazine-viewer-box" id="magazine-box">
+            <div class="magazine-stage" id="magazine-stage">
+                <img src="magazine/page-1.jpg" alt="Magazine Page 1" id="mag-slide-img" class="magazine-slide-img">
+            </div>
+            <div class="magazine-controls">
+                <div class="magazine-btn-group">
+                    <button type="button" class="mag-ctrl-btn" id="mag-prev" aria-label="Previous page">
+                        <i class="fa-solid fa-chevron-left"></i> Prev
+                    </button>
+                    <button type="button" class="mag-ctrl-btn" id="mag-next" aria-label="Next page">
+                        Next <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                    <button type="button" class="mag-ctrl-btn" id="mag-toggle" aria-label="Pause or play auto slide">
+                        <i class="fa-solid fa-pause" id="mag-toggle-icon"></i> <span id="mag-toggle-text">Pause</span>
+                    </button>
+                </div>
+                <div class="magazine-status" id="magazine-status">Page 1 / 3</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="container reveal">
+        <div class="contact-box">
+            <h3>Initiate a Creative Brief</h3>
+            <p>I am actively available for high-growth enterprise design titles, digital advertising campaigns, and professional corporate freelance consulting tracks.</p>
+            <a href="mailto:loyolite18@gmail.com" class="cta-btn"><i class="fa-regular fa-envelope"></i> loyolite18@gmail.com</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Velayutham R. Engineered Portfolio Suite. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // MOUSE GLOW TRACKING LOGIC WITH PERFORMANCE OPTIMIZATION
+        const glow = document.getElementById('cursor-glow');
+        window.addEventListener('mousemove', (e) => {
+            // Updating standard CSS variables values mapping to pointer position
+            document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
+            document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
+        });
+
+        // Inject letters for wave text execution cleanly to maintain spacing rules
+        const nameHeading = document.getElementById('waving-name');
+        const lettersArr = nameHeading.textContent.split("");
+        nameHeading.innerHTML = "";
+        lettersArr.forEach(char => {
+            const span = document.createElement('span');
+            span.className = 'wave-letter';
+            span.innerHTML = char === " " ? "&nbsp;" : char;
+            nameHeading.appendChild(span);
+        });
+
+        const PORTFOLIO_DATA = {
+            skills: [
+                "Adobe Photoshop, Illustrator, InDesign",
+                "Adobe Premiere Pro",
+                "Multi-Tier Ad System Design Layouts",
+                "Information Design & Data Graphics",
+                "Advanced Editorial & Magazine Layout",
+                "Sports Branding & Print Design",
+                "AI-Assisted Workflow Engineering"
+            ],
+            experience: [
+                {
+                    period: "Nov 2025 - Present",
+                    title: "Graphic Designer",
+                    company: "Way2News App | Hyderabad, TG",
+                    desc: "Collaborated closely with Client Success teams to produce targeted local, state, and large national ad campaigns, managing high volumes under strict deadlines."
+                },
+                {
+                    period: "Nov 2022 - Nov 2025",
+                    title: "Graphic Designer",
+                    company: "Press Information Bureau | Chennai, TN",
+                    desc: "Engineered data graphics for press feeds, managed layouts for the New India Samachar magazine, and designed the official Tamil 2024 Parliament Election Book."
+                },
+                {
+                    period: "Dec 2023",
+                    title: "Graphic Designer",
+                    company: "Tamil Thalaivas (Pro Kabaddi S10)",
+                    desc: "Designed full courtside spatial displays, dugout elements, and commercial configurations prioritizing player and partner visibility matrices."
+                }
+            ],
+            designs: [
+                { title: "Samsung Product Display", category: "Consumer Media Advertisement", img: "Samsung.jpg" },
+                { title: "ICICI Prudential Smart Life Cover Layout", category: "Targeted Media Promotion Banner", img: "icici2.jpg" },
+                { title: "Way2News", category: "Linkedin Promotion AD", img: "Your Brand Story.jpg" },
+                { title: "Adhani Groups", category: "Targeted Media Promotion Banner", img: "adhani.jpg" },
+                { title: "Way2News", category: "Linkedin Promotion AD", img: "Not a Translated ad.jpg" },
+                { title: "TATA AIG Health Protection Campaign Display", category: "Commercial Advertising Banner", img: "tata aig.jpg" },
+                { title: "Triump India", category: "Commercial Advertising Banner", img: "triump.jpg" },
+                { title: "Strategic Resilience Modern Corporate Identity", category: "Key Visual Architecture", img: "Slides 3.jpg" },
+                { title: "GRT Jwellery strip ad", category: "Consumer Media Advertisement", img: "GRT 2.jpg" },
+                { title: "GN Jwellery Static ad", category: "Consumer Media Advertisement", img: "Gn Jwellery.jpg" },
+                { title: "GN Jwellery Static ad", category: "Consumer Media Advertisement", img: "Gn.jpg" },
+                { title: "Bonsai Housing", category: "Real Estate Advertisement", img: "real estate 1.jpg" },
+                { title: "Raghuram Infrastrcture", category: "Real Estate Advertisement", img: "real estate 2.jpg" },
+                { title: "Navanaami", category: "Real Estate Advertisement", img: "real estate 3.jpg" },
+                { title: "Homeocare", category: "Hospital & Health Advertisement", img: "homeocare 1.jpg" },
+                { title: "Homeocare", category: "Hospital & Health Advertisement", img: "homeocare 2.jpg" },
+                { title: "Lupin", category: "Hospital & Health Advertisement", img: "lupin 1.jpg" },
+                { title: "Lupin", category: "Hospital & Health Advertisement", img: "lupin 2.jpg" },
+                { title: "Avanthra", category: "Consumer Media Advertisement", img: "avanthra.jpg" },
+                { title: "Contintntal", category: "Consumer Media Advertisement", img: "Continental.jpg" },
+                { title: "Atoot", category: "Consumer Media Advertisement", img: "atoot.jpg" },
+                { title: "Way2News", category: "Linkedin Promotion AD", img: "Tamil Media Plan.jpg" },
+                { title: "Way2News", category: "Self Promotion", img: "W2N.jpg" },
+                { title: "Way2News", category: "Linkedin Promotion AD", img: "Same Budget Deeper Impact.jpg" },
+                { title: "Way2News", category: "Linkedin Promotion AD", img: "Where Real Attention Lives.jpg" },
+                { title: "Way2News", category: "Self Promotion", img: "Why us.jpg" },
+            ]
+        };
+
+        const sBox = document.getElementById('skills-box');
+        PORTFOLIO_DATA.skills.forEach(skill => {
+            const item = document.createElement('div'); item.className = 'skill-item';
+            item.innerHTML = `<i class="fa-solid fa-square-check"></i> ${skill}`;
+            sBox.appendChild(item);
+        });
+
+        const tBox = document.getElementById('timeline-box');
+        PORTFOLIO_DATA.experience.forEach(exp => {
+            const entry = document.createElement('div'); entry.className = 'timeline-item';
+            entry.innerHTML = `
+                <div class="time-period">${exp.period}</div>
+                <div class="job-title">${exp.title}</div>
+                <div class="company">${exp.company}</div>
+                <div class="job-desc">${exp.desc}</div>
+            `;
+            tBox.appendChild(entry);
+        });
+
+        const gBox = document.getElementById('gallery-box');
+        PORTFOLIO_DATA.designs.forEach(item => {
+            const card = document.createElement('div'); card.className = 'gallery-card reveal';
+            card.innerHTML = `
+                <img src="${item.img}" alt="${item.title}" loading="lazy">
+                <div class="gallery-overlay">
+                    <div class="project-category">${item.category}</div>
+                    <div class="project-title">${item.title}</div>
+                </div>
+            `;
+            gBox.appendChild(card);
+        });
+
+        // AUTO-SLIDING MAGAZINE IMAGES FROM SEPARATE FOLDER ("magazine/")
+        (function initMagazineImageSlider() {
+            // Update these file names to match the images inside your "magazine" folder
+            const magImages = [
+                "magazine/page-1.jpg",
+                "magazine/page-2.jpg",
+                "magazine/page-3.jpg",
+                "magazine/page-4.jpg",
+                "magazine/page-5.jpg",
+                "magazine/page-6.jpg",
+                "magazine/page-7.jpg",
+                "magazine/page-8.jpg",
+                "magazine/page-9.jpg",
+                "magazine/page-10.jpg",
+                "magazine/page-11.jpg"
+            ];
+            const slideIntervalMs = 1500;
+
+            const imgEl = document.getElementById("mag-slide-img");
+            const stage = document.getElementById("magazine-stage");
+            const statusEl = document.getElementById("magazine-status");
+            const prevBtn = document.getElementById("mag-prev");
+            const nextBtn = document.getElementById("mag-next");
+            const toggleBtn = document.getElementById("mag-toggle");
+            const toggleIcon = document.getElementById("mag-toggle-icon");
+            const toggleText = document.getElementById("mag-toggle-text");
+
+            if (!imgEl || magImages.length === 0) return;
+
+            let currentIndex = 0;
+            let isPlaying = true;
+            let timerId = null;
+
+            function showSlide(index) {
+                currentIndex = (index + magImages.length) % magImages.length;
+                imgEl.src = magImages[currentIndex];
+                imgEl.alt = `Magazine Page ${currentIndex + 1}`;
+                statusEl.textContent = `Page ${currentIndex + 1} / ${magImages.length}`;
+            }
+
+            function startAutoSlide() {
+                stopAutoSlide();
+                if (!isPlaying || magImages.length <= 1) return;
+                timerId = setInterval(() => {
+                    showSlide(currentIndex + 1);
+                }, slideIntervalMs);
+            }
+
+            function stopAutoSlide() {
+                if (timerId) {
+                    clearInterval(timerId);
+                    timerId = null;
+                }
+            }
+
+            prevBtn.addEventListener("click", () => {
+                showSlide(currentIndex - 1);
+                if (isPlaying) startAutoSlide();
+            });
+
+            nextBtn.addEventListener("click", () => {
+                showSlide(currentIndex + 1);
+                if (isPlaying) startAutoSlide();
+            });
+
+            toggleBtn.addEventListener("click", () => {
+                isPlaying = !isPlaying;
+                if (isPlaying) {
+                    toggleIcon.className = "fa-solid fa-pause";
+                    toggleText.textContent = "Pause";
+                    startAutoSlide();
+                } else {
+                    toggleIcon.className = "fa-solid fa-play";
+                    toggleText.textContent = "Play";
+                    stopAutoSlide();
+                }
+            });
+
+            stage.addEventListener("mouseenter", stopAutoSlide);
+            stage.addEventListener("mouseleave", () => {
+                if (isPlaying) startAutoSlide();
+            });
+
+            showSlide(0);
+            startAutoSlide();
+        })();
+
+        const observerOptions = { root: null, threshold: 0.1 };
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) { entry.target.classList.add('active'); }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => scrollObserver.observe(el));
+    </script>
+</body>
+</html>
